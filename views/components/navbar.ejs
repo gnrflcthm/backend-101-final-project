@@ -5,7 +5,7 @@
     <div class="flex justify-around">
         <%- include("navlink", {url: "/" , name: "Listings", active: current === "/" }) %>
         <% if (isLoggedIn) { %>
-            <%- include("navlink", {url: "/addlisting" , name: "Post Listing", active: current === "/addlisting" }) %>
+            <%- include("navlink", {url: "/listing/add" , name: "Post Listing", active: current === "/listing/add" }) %>
             <%- include("navlink", {url: "/signout" , name: "Sign Out", active: current === "/signout" }) %>
         <% } else { %>
             <%- include("navlink", {url: "/signin" , name: "Sign In", active: current === "/signin" }) %>

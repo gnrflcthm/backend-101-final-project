@@ -26,7 +26,7 @@
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form).entries())
         console.log(JSON.stringify(data));
-        fetch("/addlisting", {
+        fetch("/listing/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

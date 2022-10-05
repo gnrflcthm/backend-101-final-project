@@ -28,7 +28,6 @@ app.use((req, res, next) => {
 });
 
 app.get("/", async (req, res) => {
-
     const listings = await Listing.find();
 
     res.render("home", { isLoggedIn: !!req.user, listings });
@@ -114,7 +113,7 @@ app.get("/signout", (req, res) => {
         .redirect("/");
 });
 
-app.route("/addlisting")
+app.route("/listing/add")
     .get((req, res) => {
         res.render("addlisting", { isLoggedIn: !!req.user });
     })
@@ -125,7 +124,7 @@ app.route("/addlisting")
             return;
         }
 
-        console.table(req.body)
+        console.table(req.body);
 
         const listing = new Listing({
             ...req.body,
@@ -139,13 +138,23 @@ app.route("/addlisting")
             res.statusMessage = "Listing created successfully";
             res.status(200);
         } catch (err) {
-            // console.log(err);
             res.statusMessage = "Error in creating a new listing.";
             res.status(418);
         }
 
         res.end();
     });
+
+app.route("/listing/:id")
+    .get(async (req, res) => {
+        const { id } = req.params;
+
+        const listing = await Listing.findById(id);
+
+        res.render("listing", { ...listing, isLoggedIn: !!req.user });
+    })
+    .delete((req, res) => {})
+    .patch((req, res) => {});
 
 app.listen(PORT, (req, res) => {
     console.log(`App running at port ${PORT}`);
