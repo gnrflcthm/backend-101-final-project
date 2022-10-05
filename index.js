@@ -22,19 +22,21 @@ app.set("views", path.join(__dirname, "/views"));
 app.use((req, res, next) => {
     const session = cookie.parse(req.headers?.cookie || "");
     if (session.token) {
-        res.user = jwt.decode(session.token);
+        req.user = jwt.decode(session.token);
     }
-
     next();
 });
 
 app.get("/", async (req, res) => {
-    res.render("home", { isLoggedIn: !!res.user });
+
+    const listings = await Listing.find();
+
+    res.render("home", { isLoggedIn: !!req.user, listings });
 });
 
 app.route("/signin")
     .get((req, res) => {
-        res.render("signin", { isLoggedIn: !!res.user });
+        res.render("signin", { isLoggedIn: !!req.user });
     })
     .post(async (req, res) => {
         const { email, password } = req.body;
@@ -51,38 +53,54 @@ app.route("/signin")
                         httpOnly: true,
                         sameSite: true,
                     })
-                )
-                    .status(200)
-                    .json({ message: "Success" });
+                ).status(200);
+                res.statusMessage = "Signed In Successfully";
             } else {
-                res.render("signin", {
-                    email,
-                    error: "Invalid Login Credentials",
-                });
+                res.status(401);
+                res.statusMessage = "Invalid Login Credentials";
             }
         } else {
-            res.render("signin", { error: "User Does Not Exist." });
+            res.status(401);
+            res.statusMessage = "User does not exist.";
         }
+        res.end();
     });
 
 app.route("/signup")
     .get((req, res) => {
-        res.render("signup", { isLoggedIn: !!res.user });
+        res.render("signup", { isLoggedIn: !!req.user });
     })
     .post(async (req, res) => {
         const { username, email, password } = req.body;
 
         console.table(req.body);
 
-        const user = new User({ username, email, password });
-
         try {
-            await user.save();
-            res.status(200);
+            const user = new User({ username, email, password });
+
+            const exists = await User.findOne({ email });
+
+            if (!exists) {
+                const newUser = await user.save();
+                const token = jwt.sign({ id: newUser.id }, process.env.SECRET);
+                res.setHeader(
+                    "Set-Cookie",
+                    cookie.serialize("token", token, {
+                        httpOnly: true,
+                        sameSite: true,
+                    })
+                ).status(200);
+                res.statusMessage = "Account Created Successfully";
+            } else {
+                res.statusMessage = "Email already in use.";
+                res.status(400);
+            }
         } catch (err) {
-            console.log(err);
+            console.log("Error at signup.");
+            res.statusMessage = "Error while creating account.";
             res.status(418);
         }
+        res.end();
     });
 
 app.get("/signout", (req, res) => {
@@ -98,9 +116,34 @@ app.get("/signout", (req, res) => {
 
 app.route("/addlisting")
     .get((req, res) => {
-        res.render("addlisting", { isLoggedIn: !!res.user });
+        res.render("addlisting", { isLoggedIn: !!req.user });
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
+        if (!req.user) {
+            res.statusMessage = "You are not logged in";
+            res.status(401).end();
+            return;
+        }
+
+        console.table(req.body)
+
+        const listing = new Listing({
+            ...req.body,
+            uploader: req.user.id,
+            datePosted: new Date(),
+            rating: 0,
+        });
+
+        try {
+            await listing.save();
+            res.statusMessage = "Listing created successfully";
+            res.status(200);
+        } catch (err) {
+            // console.log(err);
+            res.statusMessage = "Error in creating a new listing.";
+            res.status(418);
+        }
+
         res.end();
     });
 

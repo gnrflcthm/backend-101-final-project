@@ -1,11 +1,11 @@
-<article class="rounded-md w-[20%] m-4 h-60 overflow-hidden bg-[#1F1F1F]">
-    <img src="<%= thumbnail %> " class="object-cover w-full h-32" alt="Boracay">
+<a class="rounded-md w-[45%] md:w-[20%] m-4 h-60 overflow-hidden bg-[#1F1F1F] hover:scale-105 hover:bg-[#363636] transition-all active:scale-90" href="/">
+    <img src="<%= listing.previewImage %> " class="object-cover w-full h-32">
     <div class="p-4">
         <div class="flex justify-between items-center">
-            <h1 class="text-white font-bold text-xl text-ellipsis whitespace-nowrap overflow-hidden w-[80%]"><%= name %> </h1>
-            <h1 class="text-white font-bold">⭐<%= rating %> </h1>
+            <h1 class="text-white font-bold text-xl text-ellipsis whitespace-nowrap overflow-hidden w-[80%]"><%= listing.name %> </h1>
+            <h1 class="text-white font-bold">⭐<%= listing.rating %> </h1>
         </div>
-        <h2 class="text-white text-opacity-70"><%= address %> </h2>
-        <p class="text-white">&#8369;<%= pricing %> </p>
+        <h2 class="text-white text-opacity-70"><%= listing.address %> </h2>
+        <p class="text-white">&#8369;<%= listing.pricing %> </p>
     </div>
-</article>
+</a>

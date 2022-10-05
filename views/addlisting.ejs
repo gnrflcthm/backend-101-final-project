@@ -1,6 +1,48 @@
 <%- include("components/header") %> 
 <%- include("components/navbar", {current: "/addlisting"})  %> 
-<main class="flex-1">
-
+<title>Post Listing</title>
+<main class="flex-1 flex justify-center items-center">
+    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[80%] md:w-2/5" id="form">
+        <h1 class="text-white font-bold uppercase text-3xl text-center mb-4">Post Listing</h1>
+        <%- include("components/input", { label: "Name", name: "name", type: "text" })  %> 
+        <%- include("components/input", { label: "Address", name: "address", type: "text" })  %> 
+        <%- include("components/input", { label: "Price", name: "pricing", type: "number" })  %> 
+        <%- include("components/input", { label: "Preview Image URL", name: "previewImage", type: "text" })  %> 
+        <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
+            <label for="description" class="text-inherit font-bold uppercase mb-1">
+                Description
+            </label>
+            <textarea name="description" id="description" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" required> </textarea>
+        </div>
+        <small id="errorMessage" class="text-[#ED2553] text-lg hidden text-center mb-2"></small>
+        <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a]">Post</button>
+    </form>
 </main>
+<script>
+    const form = document.getElementById("form");
+    const errorMessage = document.getElementById("errorMessage");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form).entries())
+        console.log(JSON.stringify(data));
+        fetch("/addlisting", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            if (res.ok) {
+                location.replace("/")
+            } else {
+                errorMessage.innerText = res.statusText;
+                errorMessage.classList.remove("hidden");
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    });
+
+</script>
 <%- include("components/footer") %> 

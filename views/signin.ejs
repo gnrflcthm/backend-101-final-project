@@ -1,21 +1,23 @@
 
 <%- include("components/header") %> 
-<%- include("components/navbar", {current: "/signin"})  %> 
+<%- include("components/navbar", { current: "/signin", isLoggedIn })  %> 
 <title>Sign In</title>
-<main class="flex justify-center items-center p-10">
-    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-1/5" method="POST" action="/signin" id="signin">
+<main class="flex-1 flex justify-center items-center p-10">
+    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[90%] md:w-1/5" method="POST" action="/signin" id="signin">
         <h1 class="text-white font-bold uppercase text-3xl text-center mb-4">Sign In</h1>
         <%- include("components/input", { label: "Email", name: "email", type: "text" })  %> 
         <%- include("components/input", { label: "Password", name: "password", type: "password" })  %> 
         <% if (typeof error !== "undefined") { %>
             <small class="text-[#ED2553] text-lg text-center"><%= error %> </small>
         <% } %>
+        <small id="errorMessage" class="text-[#ED2553] text-lg hidden text-center mb-2"></small>
         <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a]">Sign In</button>
     </form>
 </main>
 
 <script>
     const form = document.getElementById("signin");
+    const errorMessage = document.getElementById("errorMessage");
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -27,14 +29,14 @@
             },
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(({token, error}) => {
-            if (error) {
-                console.log(error)
+        .then(res => {
+            if (res.ok) {
+                location.replace("/")
             } else {
-                location.replace("/");
+                errorMessage.innerText = res.statusText;
+                errorMessage.classList.remove("hidden");
             }
-        });
+        })
     })
 </script>
 <%- include("components/footer") %> 

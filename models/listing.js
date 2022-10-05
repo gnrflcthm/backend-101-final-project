@@ -15,9 +15,7 @@ const listingSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    previewImages: {
-        type: [String],
-    },
+    previewImage: String,
     xCoord: Number,
     yCoord: Number,
     pricing: Number,

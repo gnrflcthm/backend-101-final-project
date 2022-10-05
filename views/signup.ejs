@@ -1,14 +1,14 @@
 <%- include("components/header") %>
 <%- include("components/navbar", { current: "/signup" }) %>
 <title>Sign In</title>
-<main class="flex justify-center items-center p-10">
-    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-1/5" method="POST" action="/signin" id="registration"">
+<main class="flex-1 flex justify-center items-center p-10">
+    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[90%] md:w-1/5" method="POST" action="/signin" id="registration"">
         <h1 class="text-white font-bold uppercase text-3xl text-center mb-4">Sign Up</h1>
         <%- include("components/input", { label: "Email", name: "email", type: "text" }) %> 
         <%- include("components/input", { label: "Username", name: "username", type: "text" }) %> 
         <%- include("components/input", { label: "Password", name: "password", type: "password" }) %> 
         <%- include("components/input", { label: "Confirm Pasword", name: "confirm", type: "password" }) %>
-        <small id="errorMessage" class="text-[#ED2553] text-lg hidden text-center"></small>
+        <small id="errorMessage" class="text-[#ED2553] text-lg hidden text-center mb-2"></small>
         <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a]">Sign Up</button>
     </form>
 </main>
@@ -25,7 +25,23 @@
             errorMessage.classList.toggle("hidden")
             errorMessage.innerText = "Passwords Dot Not Match"
         } else {
-            form.submit();
+            const data = Object.fromEntries(new FormData(form).entries())
+            fetch("/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then((res) => {
+                if (res.ok) {
+                    location.replace("/")
+                } else {
+                    errorMessage.innerText = res.statusText;
+                    errorMessage.classList.remove("hidden")
+                }
+            }).catch(err => {
+                 errorMessage.innerText = err.statusText;
+            }) 
         }
         
     })
