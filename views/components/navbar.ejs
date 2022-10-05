@@ -1,0 +1,15 @@
+<nav class="flex w-full justify-between items-stretch px-6 py-3 bg-[#1F1F1F] sticky top-0">
+    <div class="flex items-center">
+        <h1 class="font-bold text-3xl text-white"><span class="text-[#ED2553]">B</span>rand</h1>
+    </div>
+    <div class="flex justify-around">
+        <%- include("navlink", {url: "/" , name: "Listings", active: current === "/" }) %>
+        <% if (isLoggedIn) { %>
+            <%- include("navlink", {url: "/addlisting" , name: "Post Listing", active: current === "/addlisting" }) %>
+            <%- include("navlink", {url: "/signout" , name: "Sign Out", active: current === "/signout" }) %>
+        <% } else { %>
+            <%- include("navlink", {url: "/signin" , name: "Sign In", active: current === "/signin" }) %>
+            <%- include("navlink", {url: "/signup" , name: "Sign Up", active: current === "/signup" }) %>
+        <% }  %>
+    </div>
+</nav>

@@ -1,0 +1,10 @@
+
+<%- include("components/header") %> 
+<%- include("components/navbar", {current: "/", isLoggedIn})  %> 
+<main class="p-10 flex-flex-col justify-start items-center w-full">
+    <h1 class="text-4xl font-bold text-white text-center mb-10">Available Listings</h1>
+    <section class="flex flex-wrap justify-center self-center">
+        <%- include('components/listing', {name: "Boracay Beach", thumbnail: "https://scontent.fmnl4-4.fna.fbcdn.net/v/t39.30808-6/310472386_165560879458813_2227631162673045663_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5cd70e&_nc_ohc=ElP6d6LYhosAX90pmuc&_nc_ht=scontent.fmnl4-4.fna&oh=00_AT_ozdtsVKIhjWh5oT1rspLXAuAIGaCQ3PqY5YeGYGkcmg&oe=6342364B", description: "lmao uwu", rating: 5.0, address: "Philippines, Earth", pricing: 69.420})  %> 
+    </section>
+</main>
+<%- include("components/footer") %> 
