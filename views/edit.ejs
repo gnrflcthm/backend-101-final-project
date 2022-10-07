@@ -1,0 +1,64 @@
+<%- include("components/header") %> 
+<%- include("components/navbar", {current: "/", user})  %> 
+<main class="flex-1 flex justify-center items-center">
+    <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[80%] md:w-3/5" id="form">
+        <div class="flex justify-between items-center w-full">
+            <a href="/listing/current" class="text-[#ED2553] hover:bg-white hover:bg-opacity-10 px-2 py-1 justify-self-start w-max rounded-md flex items-center justify-between"><i class="fa-solid fa-caret-left mr-2"></i> Return</a>
+            <button type="button" class="text-[#ED2553] hover:bg-white hover:bg-opacity-10 px-2 py-1 rounded-md" onclick="deleteListing('<%= listing.id %>')"><i class="fa-solid fa-trash mr-2"></i>Delete</button>
+        </div>
+        <h1 class="text-white font-bold uppercase text-3xl text-center mb-4">Post Listing</h1>
+        <%- include("components/input", { label: "Name", name: "name", value: listing.name })  %>  
+        <%- include("components/input", { label: "Address", name: "address", value: listing.address })  %> 
+        <%- include("components/input", { label: "Price", name: "pricing", type: "number", value:  listing.pricing })  %> 
+        <%- include("components/input", { label: "Preview Image URL", name: "previewImage", value:  listing.previewImage  })  %> 
+        <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
+            <label for="description" class="text-inherit font-bold uppercase mb-1">
+                Description
+            </label>
+            <textarea name="description" id="description" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" required><%= listing.description %></textarea>
+        </div>
+        <small id="errorMessage" class="text-[#ED2553] text-lg hidden text-center mb-2"></small>
+        <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a] w-full">Update</button>
+    </form>
+</main>
+<script>
+    const form = document.getElementById("form");
+    const errorMessage = document.getElementById("errorMessage");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form).entries())
+        console.log(JSON.stringify(data));
+        fetch("/listing/<%- listing.id %>", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            if (res.ok) {
+                location.replace("/listing/current")
+            } else {
+                errorMessage.innerText = res.statusText;
+                errorMessage.classList.remove("hidden");
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    });
+
+    function deleteListing(id) {
+        fetch(`/listing/${id}`, {
+            method: "DELETE",
+        }).then((res) => {
+            if (res.ok) {
+                location.replace("/listing/current");
+            } else {
+                errorMessage.innerText = res.statusText;
+                errorMessage.classList.remove("hidden");
+            }
+        }).catch(err => console.log(err));
+    }
+
+</script>
+<%- include("components/footer") %> 

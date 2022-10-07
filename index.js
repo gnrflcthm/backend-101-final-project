@@ -30,22 +30,24 @@ app.use((req, res, next) => {
 app.get("/", async (req, res) => {
     const listings = await Listing.find();
 
-    res.render("home", { isLoggedIn: !!req.user, listings });
+    res.render("home", { user: req.user, listings });
 });
 
 app.route("/signin")
     .get((req, res) => {
-        res.render("signin", { isLoggedIn: !!req.user });
+        res.render("signin", { user: req.user });
     })
     .post(async (req, res) => {
         const { email, password } = req.body;
 
-        console.table(req.body);
         const user = await User.findOne({ email });
 
         if (user) {
             if (user.password === password) {
-                const token = jwt.sign({ id: user.id }, process.env.SECRET);
+                const token = jwt.sign(
+                    { id: user.id, username: user.username },
+                    process.env.SECRET
+                );
                 res.setHeader(
                     "Set-Cookie",
                     cookie.serialize("token", token, {
@@ -67,12 +69,10 @@ app.route("/signin")
 
 app.route("/signup")
     .get((req, res) => {
-        res.render("signup", { isLoggedIn: !!req.user });
+        res.render("signup", { user: req.user });
     })
     .post(async (req, res) => {
         const { username, email, password } = req.body;
-
-        console.table(req.body);
 
         try {
             const user = new User({ username, email, password });
@@ -81,7 +81,10 @@ app.route("/signup")
 
             if (!exists) {
                 const newUser = await user.save();
-                const token = jwt.sign({ id: newUser.id }, process.env.SECRET);
+                const token = jwt.sign(
+                    { id: newUser.id, username: newUser.username },
+                    process.env.SECRET
+                );
                 res.setHeader(
                     "Set-Cookie",
                     cookie.serialize("token", token, {
@@ -115,7 +118,7 @@ app.get("/signout", (req, res) => {
 
 app.route("/listing/add")
     .get((req, res) => {
-        res.render("addlisting", { isLoggedIn: !!req.user });
+        res.render("addlisting", { user: req.user });
     })
     .post(async (req, res) => {
         if (!req.user) {
@@ -123,8 +126,6 @@ app.route("/listing/add")
             res.status(401).end();
             return;
         }
-
-        console.table(req.body);
 
         const listing = new Listing({
             ...req.body,
@@ -145,16 +146,89 @@ app.route("/listing/add")
         res.end();
     });
 
+app.get("/listing/current", async (req, res) => {
+    if (!req.user) {
+        res.status(302);
+        res.redirect("/");
+        return;
+    }
+    const listings = await Listing.find({ uploader: req.user.id });
+
+    res.render("mylistings", { listings, user: req.user });
+});
+
+app.get("/listing/:id/edit", async (req, res) => {
+    const { id } = req.params;
+
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+        res.redirect("404");
+        return;
+    }
+
+    res.render("edit", { listing, user: req.user });
+});
+
 app.route("/listing/:id")
     .get(async (req, res) => {
         const { id } = req.params;
 
         const listing = await Listing.findById(id);
 
-        res.render("listing", { ...listing, isLoggedIn: !!req.user });
+        res.render("listing", { ...listing, user: req.user });
     })
-    .delete((req, res) => {})
-    .patch((req, res) => {});
+    .delete(async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            const listing = await Listing.findByIdAndDelete(id).exec();
+
+            if (listing) {
+                console.log(`Deleted Listing: ${id}`);
+                res.statusMessage = "Listing Deleted Successfully";
+                res.status(200);
+            } else {
+                res.statusMessage = "Nothing was deleted.";
+            }
+        } catch (err) {
+            console.log(err);
+            res.statusMessage =
+                res.statusMessage || "Error In Deleting Listing";
+            res.status(401);
+        }
+        res.end();
+    })
+    .patch(async (req, res) => {
+        const { id } = req.params;
+        const { name, address, pricing, previewImage, description } = req.body;
+
+        const listing = await Listing.findById(id);
+
+        try {
+            if (listing) {
+                listing.name = name;
+                listing.address = address;
+                listing.pricing = pricing;
+                listing.previewImage = previewImage;
+                listing.description = description;
+                await listing.save();
+
+                res.statusMessage = "Listing Updated Successfully";
+                res.status(200);
+            } else {
+                res.statusMessage = "Listing Not Found";
+                throw new Error("Listing not Found");
+            }
+        } catch (err) {
+            console.log(err);
+            res.statusMessage =
+                res.statusMessage ||
+                "An Error Has Occured while updating Listing.";
+            res.status(401);
+        }
+        res.end();
+    });
 
 app.listen(PORT, (req, res) => {
     console.log(`App running at port ${PORT}`);

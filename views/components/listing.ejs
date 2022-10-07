@@ -1,4 +1,10 @@
-<a class="rounded-md w-[45%] md:w-[20%] m-4 h-60 overflow-hidden bg-[#1F1F1F] hover:scale-105 hover:bg-[#363636] transition-all active:scale-90" href="/">
+<% 
+    if (typeof href === "undefined") {
+        href = "/"
+    } 
+%> 
+<!-- w-[45%] md:w-[20%] -->
+<a class="rounded-md w-auto m-4 h-60 overflow-hidden bg-[#1F1F1F] hover:scale-105 hover:bg-[#363636] transition-all active:scale-90" href="<%= href %>">
     <img src="<%= listing.previewImage %> " class="object-cover w-full h-32">
     <div class="p-4">
         <div class="flex justify-between items-center">
@@ -6,6 +12,6 @@
             <h1 class="text-white font-bold">⭐<%= listing.rating %> </h1>
         </div>
         <h2 class="text-white text-opacity-70"><%= listing.address %> </h2>
-        <p class="text-white">&#8369;<%= listing.pricing %> </p>
+        <p class="text-white">&#8369;<%= listing.pricing %></p> 
     </div>
 </a>
