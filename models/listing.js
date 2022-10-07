@@ -19,7 +19,6 @@ const listingSchema = new Schema({
     xCoord: Number,
     yCoord: Number,
     pricing: Number,
-    rating: Number,
 });
 
 const Listing = model("Listing", listingSchema);

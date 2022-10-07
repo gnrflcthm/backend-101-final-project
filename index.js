@@ -13,6 +13,22 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+const isLoggedIn = (req, res, next) => {
+    if (req.user) {
+        next();
+    } else {
+        if (req.method === "GET") {
+            res.statusMessage = "You are not logged in.";
+            res.status(302);
+            res.redirect("/");
+        } else {
+            res.statusMessage = "You are not logged in.";
+            res.status(401);
+            res.end();
+        }
+    }
+};
+
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
@@ -105,7 +121,7 @@ app.route("/signup")
         res.end();
     });
 
-app.get("/signout", (req, res) => {
+app.get("/signout", isLoggedIn, (req, res) => {
     res.setHeader(
         "Set-Cookie",
         cookie.serialize("token", "", {
@@ -116,21 +132,47 @@ app.get("/signout", (req, res) => {
         .redirect("/");
 });
 
-app.route("/listing/add")
+app.post("/review", isLoggedIn, async (req, res) => {
+    const user = req.user;
+
+    const review = new Review({
+        ...req.body,
+        authorId: user.id,
+        authorUsername: user.username,
+    });
+
+    try {
+        await review.save();
+
+        const reviews = await Review.find({ listingId: req.body.listingId });
+
+        
+
+        console.log(averageRating);
+
+        await Listing.updateOne(
+            { id: req.body.listingId },
+            { rating: averageRating }
+        );
+
+        res.statusMessage = "Successfully submitted review.";
+        res.status(200);
+    } catch (err) {
+        console.log(err);
+        res.statusMessage = "Error in posting review.";
+        res.status(418);
+    }
+    res.end();
+});
+
+app.route(isLoggedIn, "/listing/add")
     .get((req, res) => {
         res.render("addlisting", { user: req.user });
     })
-    .post(async (req, res) => {
-        if (!req.user) {
-            res.statusMessage = "You are not logged in";
-            res.status(401).end();
-            return;
-        }
-
+    .post(isLoggedIn, async (req, res) => {
         const listing = new Listing({
             ...req.body,
             uploader: req.user.id,
-            datePosted: new Date(),
             rating: 0,
         });
 
@@ -146,12 +188,7 @@ app.route("/listing/add")
         res.end();
     });
 
-app.get("/listing/current", async (req, res) => {
-    if (!req.user) {
-        res.status(302);
-        res.redirect("/");
-        return;
-    }
+app.get("/listing/current", isLoggedIn, async (req, res) => {
     const listings = await Listing.find({ uploader: req.user.id });
 
     res.render("mylistings", { listings, user: req.user });
@@ -175,10 +212,15 @@ app.route("/listing/:id")
         const { id } = req.params;
 
         const listing = await Listing.findById(id);
+        const uploader = await User.findById(listing.uploader);
+        const reviews = await Review.find({ listingId: id });
 
-        res.render("listing", { ...listing, user: req.user });
+        const averageRating =
+            reviews.reduce((total, val) => total + val.rating, 0) / reviews.length;
+
+        res.render("view", { listing, rating: averageRating, uploader, reviews, user: req.user });
     })
-    .delete(async (req, res) => {
+    .delete(isLoggedIn, async (req, res) => {
         const { id } = req.params;
 
         try {
@@ -199,7 +241,7 @@ app.route("/listing/:id")
         }
         res.end();
     })
-    .patch(async (req, res) => {
+    .patch(isLoggedIn, async (req, res) => {
         const { id } = req.params;
         const { name, address, pricing, previewImage, description } = req.body;
 

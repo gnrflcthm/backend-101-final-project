@@ -9,8 +9,13 @@ const reviewSchema = new Schema({
         type: String,
         required: true,
     },
+    authorUsername: String,
     rating: Number,
     comment: String,
+    datePosted: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 const Review = model("Review", reviewSchema);

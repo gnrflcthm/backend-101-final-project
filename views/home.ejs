@@ -3,13 +3,16 @@
 <%- include("components/navbar", {current: "/", user})  %> 
 <main class="flex-1 p-10 flex-flex-col justify-start items-center w-full">
     <h1 class="text-4xl font-bold text-white text-center mb-10">Available Listings</h1>
-    <!-- flex flex-wrap justify-center self-center -->
+    <% if (listings.length === 0) { %>
+        <section class="flex justify-center items-center h-full mt-10">
+            <h1 class="font-bold text-4xl text-center text-[#ED2553]">There are currently no listings posted.</h1>
+        </section>
+    <% } else { %>
     <section class="grid grid-cols-3">
-        <%- include('components/listing', { listing: {name: "Boracay Beach", previewImage: "https://scontent.fmnl4-4.fna.fbcdn.net/v/t39.30808-6/310472386_165560879458813_2227631162673045663_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5cd70e&_nc_ohc=ElP6d6LYhosAX90pmuc&_nc_ht=scontent.fmnl4-4.fna&oh=00_AT_ozdtsVKIhjWh5oT1rspLXAuAIGaCQ3PqY5YeGYGkcmg&oe=6342364B", description: "lmao uwu", rating: 5.0, address: "Philippines, Earth", pricing: 69.420} })  %> 
-        <%- include('components/listing', { listing: {name: "Boracay Beach", previewImage: "https://scontent.fmnl4-4.fna.fbcdn.net/v/t39.30808-6/310472386_165560879458813_2227631162673045663_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5cd70e&_nc_ohc=ElP6d6LYhosAX90pmuc&_nc_ht=scontent.fmnl4-4.fna&oh=00_AT_ozdtsVKIhjWh5oT1rspLXAuAIGaCQ3PqY5YeGYGkcmg&oe=6342364B", description: "lmao uwu", rating: 5.0, address: "Philippines, Earth", pricing: 69.420} })  %> 
         <% for( let listing of listings ) { %>
-            <%- include('components/listing', { listing }) %>
+            <%- include('components/listing', { listing, href: `/listing/${listing.id}` }) %>
         <% } %>
     </section>
+    <% } %> 
 </main>
 <%- include("components/footer") %> 

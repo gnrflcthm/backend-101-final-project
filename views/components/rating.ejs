@@ -1,0 +1,30 @@
+<div class="flex justify-around items-center w-max relative">
+    <input type="hidden" name="rating" value="0" id="rating" />
+    <i class="fa-solid fa-star cursor-pointer text-[#1F1F1F]" id="1" onclick="rate(1)"></i>
+    <i class="fa-solid fa-star cursor-pointer text-[#1F1F1F]" id="2" onclick="rate(2)"></i>
+    <i class="fa-solid fa-star cursor-pointer text-[#1F1F1F]" id="3" onclick="rate(3)"></i>
+    <i class="fa-solid fa-star cursor-pointer text-[#1F1F1F]" id="4" onclick="rate(4)"></i>
+    <i class="fa-solid fa-star cursor-pointer text-[#1F1F1F]" id="5" onclick="rate(5)"></i>
+</div>
+<script>
+    const ratingInput = document.getElementById("rating");
+    function rate(rating) {
+        if (parseInt(ratingInput.value) === 1 && rating === 1) {
+            ratingInput.value = 0;
+        } else {
+            ratingInput.value = rating;
+        }
+        for (let i = 1; i <= 5; i++) {
+            const element = document.getElementById(`${i}`);
+            if (i <= parseInt(ratingInput.value)) {
+                if (!element.classList.contains("text-yellow-500")) {
+                    element.classList.remove("text-[#1F1F1F]");
+                    element.classList.add("text-yellow-500");
+                }
+            } else {
+                element.classList.remove("text-yellow-500");
+                element.classList.add("text-[#1F1F1F]");
+            }
+        }
+    }
+</script>
