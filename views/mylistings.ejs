@@ -9,7 +9,7 @@
     <% } else { %>
         <section class="grid grid-cols-3">
             <% for(let listing of listings) { %>
-                <%- include("components/listing", {listing, canDelete: true, href: `/listing/${listing.id}/edit`}) %>
+                <%- include("components/listing", {listing, canEdit: true, href: `/listing/${listing.id}/edit`}) %>
             <% } %>
         </section>
     <% }  %>

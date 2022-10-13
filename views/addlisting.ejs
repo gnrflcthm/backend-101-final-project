@@ -1,13 +1,18 @@
 <%- include("components/header") %> 
-<%- include("components/navbar", {current: "/addlisting"})  %> 
+<%- include("components/navbar", {current: "/addlisting", user})  %> 
 <title>Post Listing</title>
 <main class="flex-1 flex justify-center items-center">
     <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[80%] md:w-2/5" id="form">
+        <div class="flex justify-between items-center w-full">
+            <a href="/" class="text-[#ED2553] hover:bg-white hover:bg-opacity-10 px-2 py-1 justify-self-start w-max rounded-md flex items-center justify-between"><i class="fa-solid fa-caret-left mr-2"></i> Return</a>
+        </div>
         <h1 class="text-white font-bold uppercase text-3xl text-center mb-4">Post Listing</h1>
         <%- include("components/input", { label: "Name", name: "name", type: "text" })  %> 
         <%- include("components/input", { label: "Address", name: "address", type: "text" })  %> 
         <%- include("components/input", { label: "Price", name: "pricing", type: "number" })  %> 
         <%- include("components/input", { label: "Preview Image URL", name: "previewImage", type: "text" })  %> 
+        <%- include("components/input", { label: "Longitudinal Coordinates", name: "longitude", placeholder: "12.1234567" })  %> 
+        <%- include("components/input", { label: "Latitudinal Coordinates", name: "latitude", placeholder: "12.1234567" })  %> 
         <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
             <label for="description" class="text-inherit font-bold uppercase mb-1">
                 Description
@@ -21,11 +26,22 @@
 <script>
     const form = document.getElementById("form");
     const errorMessage = document.getElementById("errorMessage");
+    const longitude = document.getElementById("longitude");
+    const latitude = document.getElementById("latitude");
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
+
+        try {
+            parseFloat(longitude.value)
+            parseFloat(latitude.value)
+        } catch (err) {
+            errorMessage.innerText = "Invalid Coordinates Entered";
+            errorMessage.classList.remove("hidden");
+            return;
+        }
+
         const data = Object.fromEntries(new FormData(form).entries())
-        console.log(JSON.stringify(data));
         fetch("/listing/add", {
             method: "POST",
             headers: {

@@ -132,40 +132,32 @@ app.get("/signout", isLoggedIn, (req, res) => {
         .redirect("/");
 });
 
-app.post("/review", isLoggedIn, async (req, res) => {
+app.post("/review", isLoggedIn, (req, res) => {
     const user = req.user;
 
     const review = new Review({
         ...req.body,
-        authorId: user.id,
-        authorUsername: user.username,
+        author: user.id,
     });
 
-    try {
-        await review.save();
-
-        const reviews = await Review.find({ listingId: req.body.listingId });
-
-        
-
-        console.log(averageRating);
-
-        await Listing.updateOne(
-            { id: req.body.listingId },
-            { rating: averageRating }
-        );
-
-        res.statusMessage = "Successfully submitted review.";
-        res.status(200);
-    } catch (err) {
-        console.log(err);
-        res.statusMessage = "Error in posting review.";
-        res.status(418);
-    }
+    review
+        .save()
+        .then(async (val) => {
+            await Listing.findByIdAndUpdate(val.listing, {
+                $push: { reviews: val.id },
+            });
+            res.statusMessage = "Successfully submitted review.";
+            res.status(200);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.statusMessage = "Error in posting review.";
+            res.status(418);
+        });
     res.end();
 });
 
-app.route(isLoggedIn, "/listing/add")
+app.route("/listing/add")
     .get((req, res) => {
         res.render("addlisting", { user: req.user });
     })
@@ -211,14 +203,17 @@ app.route("/listing/:id")
     .get(async (req, res) => {
         const { id } = req.params;
 
-        const listing = await Listing.findById(id);
+        const listing = await Listing.findById(id).populate("reviews");
         const uploader = await User.findById(listing.uploader);
-        const reviews = await Review.find({ listingId: id });
+        const reviews = await Review.find({ listing: id }).populate("author");
 
-        const averageRating =
-            reviews.reduce((total, val) => total + val.rating, 0) / reviews.length;
-
-        res.render("view", { listing, rating: averageRating, uploader, reviews, user: req.user });
+        res.render("view", {
+            listing,
+            rating: await listing.getAverageRating(),
+            uploader,
+            reviews,
+            user: req.user,
+        });
     })
     .delete(isLoggedIn, async (req, res) => {
         const { id } = req.params;
@@ -243,7 +238,15 @@ app.route("/listing/:id")
     })
     .patch(isLoggedIn, async (req, res) => {
         const { id } = req.params;
-        const { name, address, pricing, previewImage, description } = req.body;
+        const {
+            name,
+            address,
+            pricing,
+            previewImage,
+            description,
+            longitude,
+            latitude,
+        } = req.body;
 
         const listing = await Listing.findById(id);
 
@@ -254,6 +257,8 @@ app.route("/listing/:id")
                 listing.pricing = pricing;
                 listing.previewImage = previewImage;
                 listing.description = description;
+                listing.longitude = longitude;
+                listing.latitude = latitude;
                 await listing.save();
 
                 res.statusMessage = "Listing Updated Successfully";

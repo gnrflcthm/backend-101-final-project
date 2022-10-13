@@ -2,32 +2,59 @@
 <%- include("components/navbar", { user })  %> 
 <title><%= listing.name %> </title>
 <main class="flex flex-col items-stretch justify-start p-8 relative">
-    <div class="sticky-top-0">
-        <div class="w-full rounded-md h-[32rem] relative mb-4">
-            <img src="<%= listing.previewImage %>" alt="<%= listing.name %>" class="object-contain w-full h-full relative">
-        </div>
-        <h1 class="uppercase font-bold text-4xl text-white mb-2"><%= listing.name %></h1>
-        <h2 class="uppercase font-bold text-xl text-white text-opacity-50 mb-2"><%= listing.address %></h2>
-        <div class="flex items-center justify-start">
-            <p class="text-white mr-4 font-bold"><i class="fa-solid fa-star text-yellow-500 mr-2"></i>
-                <%= rating.toFixed(1) %>
-                <% if (reviews.length !== 1) { %>
-                    (<%= reviews.length > 1 ? reviews.length : "No"  %> Reviews)
-                <% } else { %>
-                    (1 Review)
-                <% }  %>
-            </p>
-            <p class="text-white mr-4 font-bold"><i class="fa-solid fa-user text-[#ED2553] mr-2"></i> <%= uploader.username %></p>
-            <p class="text-white mr-4 font-bold"><i class="fa-solid fa-peso-sign text-green-500 mr-2"></i> <%= listing.pricing.toFixed(2) %></p>
-        </div>
+    <div class="w-full rounded-md lg:h-[32rem] relative mb-4">
+        <img src="<%= listing.previewImage %>" alt="<%= listing.name %>" class="object-contain w-full h-full relative">
     </div>
-    <p class="text-white font-semibold p-2 mb-4">
-        <%= listing.description %> 
-    </p>
+    <div class="block lg:flex justify-between mb-4">
+        <div class="w-full lg:w-[50%]">
+            <h1 class="uppercase font-bold text-4xl text-white mb-2"><%= listing.name %></h1>
+            <h2 class="uppercase font-bold text-xl text-white text-opacity-50 mb-2"><%= listing.address %></h2>
+            <div class="flex items-center justify-start">
+                <p class="text-white mr-4 font-bold"><i class="fa-solid fa-star text-yellow-500 mr-2"></i>
+                    <%= rating.toFixed(1) %>
+                    <% if (reviews.length !== 1) { %>
+                        (<%= reviews.length > 1 ? reviews.length : "No"  %> Reviews)
+                    <% } else { %>
+                        (1 Review)
+                    <% }  %>
+                </p>
+                <p class="text-white mr-4 font-bold"><i class="fa-solid fa-user text-[#ED2553] mr-2"></i> <%= uploader.username %></p>
+                <p class="text-white mr-4 font-bold"><i class="fa-solid fa-peso-sign text-green-500 mr-2"></i> <%= listing.pricing.toFixed(2) %></p>
+            </div>
+            <p class="text-white font-semibold p-2 mb-4">
+                <%= listing.description %>
+            </p>
+        </div>
+        <% if (listing.longitude && listing.latitude) { %>
+            <div class="mt-4 w-full lg:w-[50%]">
+                <h1 class="text-white font-bold text-3xl mb-2">Location</h1>
+                <div class="overflow-hidden w-full h-[24rem] lg:px-10">
+                    <iframe src="https://www.google.com/maps?q=<%= `${listing.longitude},${listing.latitude}` %>&z=16&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-full"></iframe>
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <% if (user && (uploader.username !== user.username)) { %>
+        <form class="bg-[#424242] p-8 rounded-md my-8" id="reviewForm">
+                <h1 class="text-2xl font-bold text-white mb-4">Leave a Review</h1>
+            <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
+                <p class="text-inherit font-bold uppercase mb-1">Rating</p>
+                <%- include("components/rating") %>
+            </div>
+            <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
+                <label for="review" class="text-inherit font-bold uppercase mb-1">
+                    Comment
+                </label>
+                <textarea name="comment" id="review" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" placeholder="Leave Us A Comment..." required> </textarea>
+            </div>
+            <small id="errorMessage" class="text-[#ED2553] text-lg hidden mb-2"></small>
+            <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a] w-full">Submit Review</button>
+        </form>
+    <% } %>
     <section class="flex flex-col items-strech justify-start">
-        <h1 class="text-white font-bold text-3xl mb-4">Reviews</h1>
+        <h1 class="text-white font-bold text-3xl mb-8">Reviews</h1>
         <% if (reviews.length === 0) { %>
-            <h1 class="text-center text-xl font-bold text-white text-opacity-50">There are currenty no reivews for this listing.</h1>
+            <h1 class="text-center text-xl font-bold text-white text-opacity-50 py-10">There are currenty no reivews for this listing.</h1>
         <% } else { %>
             <div class="px-4">
                 <% for(let review of reviews) { %>
@@ -36,21 +63,7 @@
             </div>
         <% }  %>
     </section>
-    <form class="bg-[#424242] p-8 rounded-md mt-8" id="reviewForm">
-        <h1 class="text-2xl font-bold text-white mb-4">Leave a Review</h1>
-        <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
-            <p class="text-inherit font-bold uppercase mb-1">Rating</p>
-            <%- include("components/rating") %>
-        </div>
-        <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
-            <label for="review" class="text-inherit font-bold uppercase mb-1">
-                Comment
-            </label>
-            <textarea name="comment" id="review" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" placeholder="Leave Us A Comment..." required> </textarea>
-        </div>
-        <small id="errorMessage" class="text-[#ED2553] text-lg hidden mb-2"></small>
-        <button type="submit" class="text-white font-bold text-xl uppercase bg-[#ED2553] py-2 rounded-md hover:bg-[#eb436a] w-full">Submit Review</button>
-    </form>
+    
 </main>
 <script>
     const reviewForm = document.getElementById("reviewForm")
@@ -60,7 +73,7 @@
         e.preventDefault();
         
         const data = Object.fromEntries(new FormData(reviewForm).entries());
-        data["listingId"] = "<%= listing.id %>";
+        data["listing"] = "<%= listing.id %>";
         
         fetch("/review", {
             method: "POST",

@@ -5,6 +5,12 @@
     if (typeof type === "undefined") {
         type = "text"
     }
+
+    if (typeof placeholder === "undefined") {
+        placeholder = ""
+    }
+
+
  %> 
 <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
     <% if (label) { %>
@@ -12,5 +18,5 @@
             <%= label %>
         </label>
     <% } %>
-    <input value="<%= value %>" type="<%= type %>" name="<%= name %>" id="<%= name %>" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" required />
+    <input placeholder="<%= placeholder %>" value="<%= value %>" type="<%= type %>" name="<%= name %>" id="<%= name %>" class="rounded-md p-2 border-[1px] border-transparent text-[#ED2553] focus:outline-none" required />
 </div>

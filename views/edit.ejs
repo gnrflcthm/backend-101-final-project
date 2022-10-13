@@ -1,5 +1,5 @@
 <%- include("components/header") %> 
-<%- include("components/navbar", {current: "/", user})  %> 
+<%- include("components/navbar", {current: "", user})  %> 
 <main class="flex-1 flex justify-center items-center">
     <form class="flex flex-col justify-start items-stretch rounded-md bg-[#1F1F1F] p-8 w-[80%] md:w-3/5" id="form">
         <div class="flex justify-between items-center w-full">
@@ -10,7 +10,9 @@
         <%- include("components/input", { label: "Name", name: "name", value: listing.name })  %>  
         <%- include("components/input", { label: "Address", name: "address", value: listing.address })  %> 
         <%- include("components/input", { label: "Price", name: "pricing", type: "number", value:  listing.pricing })  %> 
-        <%- include("components/input", { label: "Preview Image URL", name: "previewImage", value:  listing.previewImage  })  %> 
+        <%- include("components/input", { label: "Preview Image URL", name: "previewImage", value:  listing.previewImage  })  %>
+        <%- include("components/input", { label: "Longitudinal Coordinates", name: "longitude", placeholder: "12.1234567", value: listing.longitude })  %> 
+        <%- include("components/input", { label: "Latitudinal Coordinates", name: "latitude", placeholder: "12.1234567", value: listing.latitude })  %> 
         <div class="flex flex-col justify-start items-stretch mb-4 focus-within:text-[#ED2553] text-white">
             <label for="description" class="text-inherit font-bold uppercase mb-1">
                 Description
@@ -24,9 +26,20 @@
 <script>
     const form = document.getElementById("form");
     const errorMessage = document.getElementById("errorMessage");
+    const longitude = document.getElementById("longitude");
+    const latitude = document.getElementById("latitude");
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
+
+        try {
+            parseFloat(longitude.value)
+            parseFloat(latitude.value)
+        } catch (err) {
+            errorMessage.innerText = "Invalid Coordinates Entered";
+            errorMessage.classList.remove("hidden");
+        }
+
         const data = Object.fromEntries(new FormData(form).entries())
         console.log(JSON.stringify(data));
         fetch("/listing/<%- listing.id %>", {

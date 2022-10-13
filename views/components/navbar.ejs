@@ -14,7 +14,7 @@
         <!-- <%- include("navlink", {url: "/" , name: "Listings", active: current === "/" }) %> -->
         <% if (user) { %>
             <h2 class="text-white text-xl rounded-full px-4 py-2 hover:bg-white hover:bg-opacity-5"><i class="fa-solid fa-power-off text-[#ED2553] cursor-pointer"></i> Welcome <span class="text-[#ED2553] font-bold"><%= user.username %></span> </h2>
-            <div class="group-hover:flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-all opacity-0 flex-col absolute top-full left-0 w-full bg-[#1F1F1F] bg-opacity-50 z-20 p-2 rounded-b-md">
+            <div class="group-hover:flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-all opacity-0 flex-col absolute top-full left-0 w-full bg-[#1F1F1F] bg-opacity-70 z-20 p-2 rounded-b-md">
                 <div class="mb-2"><%- include("navlink", {url: "/" , name: "All Listings", active: current === "/" }) %></div>
                 <div class="mb-2"><%- include("navlink", {url: "/listing/current" , name: "My Listings", active: current === "/listing/current" }) %></div>
                 <div class="mb-2"><%- include("navlink", {url: "/listing/add" , name: "Post Listing", active: current === "/listing/add" }) %></div>
