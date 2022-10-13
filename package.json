@@ -1,14 +1,14 @@
 {
   "name": "FINAL_PROJECT_THIAM_GIAN_RAFAEL",
   "version": "1.0.0",
-  "description": "",
+  "description": "Final Project for Backend 101",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently --kill-others \"nodemon\" \"postcss public/tailwind.css -o public/app.css --watch\"",
-    "tailwind:css": "postcss public/tailwind.css -o public/app.css --watch"
+    "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Gian Thiam",
   "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.12",
