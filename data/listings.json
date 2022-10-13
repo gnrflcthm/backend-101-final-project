@@ -1,0 +1,101 @@
+[
+  {
+    "name": "Boracay Beach",
+    "description": "More fun at Boracay.",
+    "address": "Boracay",
+    "previewImage": "https://images.pexels.com/photos/457882/pexels-photo-457882.jpeg",
+    "longitude": 11.9711884,
+    "latitude": 121.9175685,
+    "pricing": 12000,
+    "datePosted": 1665416722585,
+    "tags": []
+  },
+  {
+    "name": "SMDC Sun Residences",
+    "description": "Life meets luxury at the roundabout of Quezon City and Manila. SMDC Sun Residences addresses the need for a more balanced lifestyle, with amenities like",
+    "address": "Welcome Rotonda",
+    "previewImage": "https://images.pexels.com/photos/3167175/pexels-photo-3167175.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.6179181,
+    "latitude": 121.0002993,
+    "pricing": 50000,
+    "datePosted": "1665416722586",
+    "tags": []
+  },
+  {
+    "name": "Puerto Galera",
+    "description": "Puerto Galera is a town on the Philippine island of Mindoro. It’s known for its dive sites and beaches. The long curve of White Beach is backed by bars and resorts. Inland, a forest trail leads to secluded Talipanan Falls, and a hillside 9-hole golf course sits above the coast. Northeast, the waters off Sabang Beach teem with marine life and corals. Medio and Paniquian (Boquete) islands offer quieter beaches.",
+    "address": "Mindoro, Palawan",
+    "previewImage": "https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 13.5010606,
+    "latitude": 120.9511674,
+    "pricing": 35000,
+    "datePosted": 1665416722586,
+    "tags": []
+  },
+  {
+    "name": "Jollibee",
+    "description": "Bida Ang Saya.",
+    "address": "Espana Blvd, Sampaloc, Manila",
+    "previewImage": "https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.6066725,
+    "latitude": 120.9890905,
+    "pricing": 89,
+    "datePosted": 1665416722586,
+    "tags": []
+  },
+  {
+    "name": "Nice Hotel",
+    "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur, omnis? Iste repellat vel nobis omnis architecto, laborum iure commodi expedita.",
+    "address": "Manila",
+    "previewImage": "https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.590734,
+    "latitude": 120.98354,
+    "pricing": 150,
+    "datePosted": 1665416722586,
+    "tags": []
+  },
+  {
+    "name": "Mall Of Asia",
+    "description": "Massive bayfront shopping mall with an amusement park, theater, restaurants & convention center.",
+    "address": "Pasay, Metro Manila",
+    "previewImage": "https://images.pexels.com/photos/2610756/pexels-photo-2610756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.535199,
+    "latitude": 120.982664,
+    "pricing": 15000,
+    "datePosted": 1665416722587,
+    "tags": []
+  },
+  {
+    "name": "Pico De Loro",
+    "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur, omnis? Iste repellat vel nobis omnis architecto, laborum iure commodi expedita.",
+    "address": "Nasugbu, Batangas",
+    "previewImage": "https://images.pexels.com/photos/261169/pexels-photo-261169.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.1899408,
+    "latitude": 120.5955961,
+    "pricing": 1500,
+    "datePosted": 1665416722587,
+    "tags": []
+  },
+  {
+    "name": "Club Punta Fuego",
+    "description": "Lovely, peaceful and beautiful place for staying at least 7 days.",
+    "address": "Nasugbu, Batangas",
+    "previewImage": "https://images.pexels.com/photos/60217/pexels-photo-60217.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 14.133181,
+    "latitude": 120.579957,
+    "pricing": 9000,
+    "datePosted": 1665416722587,
+    "tags": []
+  },
+  {
+    "name": "Hannah's Beach Resort",
+    "description": "Relaxed rooms, dorms & cabins in an informal beach resort offering 5 pools, 2 bars & a restaurant.",
+    "address": "Pagudpod, Ilocos Norte",
+    "previewImage": "https://images.pexels.com/photos/1450363/pexels-photo-1450363.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "longitude": 18.625,
+    "latitude": 120.8550335,
+    "pricing": 8500,
+    "datePosted": 1665416722587,
+    "tags": []
+  }
+]
