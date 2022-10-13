@@ -829,67 +829,84 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
 .focus-within\:text-\[\#ED2553\]:focus-within {
   --tw-text-opacity: 1;
   color: rgb(237 37 83 / var(--tw-text-opacity));
 }
+
 .hover\:scale-105:hover {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
+
 .hover\:bg-white:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#eb436a\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(235 67 106 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#ec3d66\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(236 61 102 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#5a5a5a\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(90 90 90 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#363636\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(54 54 54 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#e93d65\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(233 61 101 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-\[\#ED2553\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(237 37 83 / var(--tw-bg-opacity));
 }
+
 .hover\:bg-opacity-10:hover {
   --tw-bg-opacity: 0.1;
 }
+
 .hover\:bg-opacity-5:hover {
   --tw-bg-opacity: 0.05;
 }
+
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
+
 .active\:scale-90:active {
   --tw-scale-x: .9;
   --tw-scale-y: .9;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
+
 .group:hover .group-hover\:pointer-events-auto {
   pointer-events: auto;
 }
+
 .group:hover .group-hover\:flex {
   display: flex;
 }
+
 .group:hover .group-hover\:opacity-100 {
   opacity: 1;
 }
+
 @media (min-width: 768px) {
 
   .md\:w-2\/5 {
@@ -904,6 +921,7 @@ video {
     width: 20%;
   }
 }
+
 @media (min-width: 1024px) {
 
   .lg\:flex {
@@ -923,6 +941,7 @@ video {
     padding-right: 2.5rem;
   }
 }
+
 @media (min-width: 1536px) {
 
   .\32xl\:w-1\/5 {
